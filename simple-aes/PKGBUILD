@@ -1,0 +1,41 @@
+# Maintainer: Your Name <your.email@example.com>
+pkgname="simple-aes-bin"
+_pkgname="simple-aes"
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="A personal simple Aes tool with file encryption and decryption capabilities"
+arch=('x86_64')
+url="https://github.com/Sawengchuan/sec-aur-bin"
+license=('custom')
+depends=('glibc' 'gcc-libs')
+
+source=("sec-aur-bin::git+https://github.com/Sawengchuan/sec-aur-bin.git")
+sha256sums=('SKIP')
+
+package() {
+    # Step into the cloned repository, then straight into the simple-aes subfolder
+    cd "${srcdir}/sec-aur-bin/simple-aes"
+
+    # 1. Create target directories using the clean _pkgname variable
+    install -d "${pkgdir}/usr/share/${_pkgname}/libs"
+    install -d "${pkgdir}/usr/share/${_pkgname}/assets"
+
+    # 2. Install the main executable
+    install -m755 "egui_binary_tool" "${pkgdir}/usr/share/${_pkgname}/"
+
+    # 3. Install the contents of the libs folder
+    install -m644 "libs/libEncryptionLibNative.so" "${pkgdir}/usr/share/${_pkgname}/libs/"
+
+    # 4. Install the contents of the assets folder
+    install -m644 "assets/clipart959280.png" "${pkgdir}/usr/share/${_pkgname}/assets/"
+    install -m644 "assets/clipart959280.ico" "${pkgdir}/usr/share/${_pkgname}/assets/"
+
+    # 5. Create the system launcher script in /usr/bin
+    install -d "${pkgdir}/usr/bin"
+    cat <<EOF > "${pkgdir}/usr/bin/${_pkgname}"
+#!/bin/sh
+cd "/usr/share/${_pkgname}"
+LD_LIBRARY_PATH="/usr/share/${_pkgname}/libs:\$LD_LIBRARY_PATH" exec ./egui_binary_tool "\$@"
+EOF
+    chmod +x "${pkgdir}/usr/bin/${_pkgname}"
+}
