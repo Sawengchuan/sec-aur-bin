@@ -1,7 +1,7 @@
 # Maintainer: Your Name <your.email@example.com>
 pkgname="simple-aes-bin"
 _pkgname="simple-aes"
-pkgver=1.1.0
+pkgver=1.1.1
 pkgrel=1
 pkgdesc="A personal simple Aes tool with file encryption and decryption capabilities"
 arch=('x86_64')
